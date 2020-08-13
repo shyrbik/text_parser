@@ -1,0 +1,3 @@
+regexSentence=(?<=[.!?:])\\s
+regexWord=\\b
+regexParagraph=\\n

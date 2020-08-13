@@ -1,0 +1,109 @@
+Welcome to Java Socket programming example. Every server is a program that runs on a specific system and listens on a specific port. Sockets are bound to the port numbers and when we run any server it just listens on the socket and waits for client requests. For example, tomcat server running on port 8080 waits for client requests and once it gets any client request, it responds to them.
+A socket is one endpoint of a two-way communication link between two programs running on the network. The socket is bound to a port number so that the TCP layer can identify the application that data is destined to be sent.
+Jav.
+In java socket programming example tutorial, we will learn how to write java socket server and java socket client program. We will also learn how server client program read and write data on the socket.
+
+java.net.Socket and java.net.ServerSocket are the java classes that implements Socket and Socket server.
+
+Java Socket Server Example
+
+public class ReadFileFindMatches {
+
+    public List<String> lineWithParam(Criteria criteria, String filePath) {
+
+    List<String> linesWithParameters = new ArrayList<>();
+    String paramPlusValue;
+
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(filePath), StandardCharsets.UTF_8))){
+            String line;
+            while ((line = reader.readLine()) != null) {
+//флаг, отображающий соответствие строки заданным критериям
+                   boolean flagMultiPrams = true;
+                   for (Map.Entry<String, Object> stringParamForSearch : criteria.getCriteria().entrySet()) {
+                        paramPlusValue = stringParamForSearch.toString().replace("[", "")
+                                .replace("]", "");
+                        if (!(line.contains(criteria.getGroupSearchName()) && line.contains(paramPlusValue))) {
+                            flagMultiPrams = false;
+                        }
+                    }
+
+                    if (flagMultiPrams) {
+                        linesWithParameters.add(line);
+                    }
+                }
+            }
+        catch (IOException e) {
+            //Дописать проброс исключений
+            System.out.println("Error!");        }
+        return linesWithParameters;
+    }
+
+}
+
+
+To test java socket programming of server-client communication, first we need to run SocketServerExample class. When you will run socket server, it will just print “Waiting for client request” and then wait for the client request.
+
+Now when you will run SocketClientExample class, it will send a request to java socket server and print the response message to console.
+
+public class SocketClientExample {
+
+    public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException{
+        //get the localhost IP address, if server is running on some other IP, you need to use that
+        InetAddress host = InetAddress.getLocalHost();
+        Socket socket = null;
+        ObjectOutputStream oos = null;
+        ObjectInputStream ois = null;
+        for(int i=0; i<5;i++){
+            //establish socket connection to server
+            socket = new Socket(host.getHostName(), 9876);
+            //write to socket using ObjectOutputStream
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("Sending request to Socket Server");
+            if(i==4)oos.writeObject("exit");
+            else oos.writeObject(""+i);
+            //read the server response message
+            ois = new ObjectInputStream(socket.getInputStream());
+            String message = (String) ois.readObject();
+            System.out.println("Message: " + message);
+            //close resources
+            ois.close();
+            oos.close();
+            Thread.sleep(100);
+        }
+    }
+}
+
+Now when you will run SocketClientExample class, it will send a request to java socket server and print the response message to console.
+
+That’s all for a quick roundup of Socket programming in java. I hope you can get started with java socket server and java socket client programming.
+
+
+That’s all for a quick roundup of Socket programming in java. I hope you can get started with java socket server and java socket client programming.
+
+
+Example of Java Socket Programming To create the server application, we need to create the instance of ServerSocket class. Here, we are using 6666 port number for the communication between the client and server. ... If clients connects with the given port number, it returns an instance of Socket.
+
+Here, we are going to make one-way client and server communication. In this application, client sends a message to the server, server reads the message and prints it. Here, two classes are being used: Socket and ServerSocket. The Socket class is used to communicate client and server. Through this class, we can read and write message. The ServerSocket class is used at server-side. The accept() method of ServerSocket class blocks the console until the client is connected. After the successful connection of client, it returns the instance of Socket at server-side.
+
+
+
+public class MyServer {  
+public static void main(String[] args){  
+try{  
+ServerSocket ss=new ServerSocket(6666);  
+Socket s=ss.accept();//establishes connection   
+DataInputStream dis=new DataInputStream(s.getInputStream());  
+String  str=(String)dis.readUTF();  
+System.out.println("message= "+str);  
+ss.close();  
+}
+catch(Exception e){System.out.println(e);
+}  
+}  
+}  
+
+Here, we are going to make one-way client and server communication. In this application, client sends a message to the server, server reads the message and prints it. Here, two classes are being used: Socket and ServerSocket. The Socket class is used to communicate client and server. Through this class, we can read and write message. The ServerSocket class is used at server-side. The accept() method of ServerSocket class blocks the console until the client is connected. After the successful connection of client, it returns the instance of Socket at server-side.
+Now when you will run SocketClientExample class, it will send a request to java socket server and print the response message to console.
